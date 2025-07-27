@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Any
 
+from packaging.version import Version
 from typing_extensions import Self
 
 
@@ -46,7 +47,7 @@ class ProjectInfo:
     requires_dist: list[str]
     requires_python: str
     summary: str
-    version: str
+    version: Version
     yanked: bool
     yanked_reason: str | None
 
@@ -78,7 +79,7 @@ class ProjectInfo:
             requires_dist=data.get("requires_dist", []),
             requires_python=data["requires_python"],
             summary=data["summary"],
-            version=data["version"],
+            version=Version(data["version"]),
             yanked=data["yanked"],
             yanked_reason=data["yanked_reason"],
         )

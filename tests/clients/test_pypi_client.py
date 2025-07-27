@@ -5,6 +5,7 @@ from typing import Any, cast
 
 import httpx
 import pytest
+from packaging.version import Version
 from pytest_httpx import HTTPXMock
 
 from pypi.clients import PyPIClient
@@ -57,7 +58,7 @@ async def test_get_project_requests(
 
     assert isinstance(result, ProjectResponse)
     assert result.info.name == "requests"
-    assert result.info.version == "2.32.4"
+    assert result.info.version == Version("2.32.4")
     assert result.info.author == "Kenneth Reitz"
     assert result.info.author_email == "me@kennethreitz.org"
     assert result.info.summary == "Python HTTP for Humans."
@@ -107,7 +108,7 @@ async def test_get_project_version_requests(
 
     assert isinstance(result, ProjectResponse)
     assert result.info.name == "requests"
-    assert result.info.version == "2.31.0"
+    assert result.info.version == Version("2.31.0")
 
 
 @pytest.mark.asyncio

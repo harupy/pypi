@@ -7,7 +7,7 @@ authors = [
     { name = "harupy", email = "17039389+harupy@users.noreply.github.com" },
 ]
 requires-python = ">=3.10"
-dependencies = ["httpx>=0.28.1", "typing-extensions>=4.14.1"]
+dependencies = ["httpx>=0.28.1", "typing-extensions>=4.14.1", "packaging>=24.0"]
 
 [project.scripts]
 pypi = "pypi:main"
@@ -47,4 +47,4 @@ warn_return_any = false
 
 [tool.bandit]
 exclude_dirs = ["tests"]
-skips = ["B101"]  # Skip assert_used test
+skips = ["B101"]         # Skip assert_used test
