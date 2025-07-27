@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
 
-from packaging.version import Version
+from packaging.version import InvalidVersion, Version
 from typing_extensions import Self
 
 
@@ -171,21 +171,27 @@ class Vulnerability:
 class ProjectResponse:
     info: ProjectInfo
     last_serial: int
-    releases: dict[str, list[ReleaseFile]]
+    releases: dict[Version, list[ReleaseFile]]
     urls: list[ReleaseFile]
     vulnerabilities: list[Vulnerability]
 
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> Self:
-        releases: dict[str, list[ReleaseFile]] = {}
+        releases: dict[Version, list[ReleaseFile]] = {}
 
         # Handle case where releases key might not exist (specific version endpoints)
-        if "releases" in data:
-            for version, files in data["releases"].items():
-                release_files: list[ReleaseFile] = []
-                for file_data in files:
-                    release_files.append(ReleaseFile.from_json(file_data))
-                releases[version] = release_files
+        if releases_data := data.get("releases"):
+            for version_str, files in releases_data.items():
+                try:
+                    version_key = Version(version_str)
+                except InvalidVersion:
+                    # Skip invalid version strings
+                    continue
+                else:
+                    release_files: list[ReleaseFile] = []
+                    for file_data in files:
+                        release_files.append(ReleaseFile.from_json(file_data))
+                    releases[version_key] = release_files
 
         return cls(
             info=ProjectInfo.from_json(data["info"]),
