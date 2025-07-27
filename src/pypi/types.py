@@ -143,12 +143,37 @@ class ReleaseFile:
 
 
 @dataclass
+class Vulnerability:
+    aliases: list[str]
+    details: str
+    summary: str | None
+    fixed_in: list[str]
+    id: str
+    link: str
+    source: str
+    withdrawn: str | None
+
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> Self:
+        return cls(
+            aliases=data["aliases"],
+            details=data["details"],
+            summary=data.get("summary"),
+            fixed_in=data["fixed_in"],
+            id=data["id"],
+            link=data["link"],
+            source=data["source"],
+            withdrawn=data["withdrawn"],
+        )
+
+
+@dataclass
 class ProjectResponse:
     info: ProjectInfo
     last_serial: int
     releases: dict[str, list[ReleaseFile]]
     urls: list[ReleaseFile]
-    vulnerabilities: list[Any]
+    vulnerabilities: list[Vulnerability]
 
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> Self:
@@ -169,5 +194,7 @@ class ProjectResponse:
             last_serial=data["last_serial"],
             releases=releases,
             urls=[ReleaseFile.from_json(f) for f in data["urls"]],
-            vulnerabilities=data.get("vulnerabilities", []),
+            vulnerabilities=[
+                Vulnerability.from_json(vuln) for vuln in data.get("vulnerabilities", [])
+            ],
         )
