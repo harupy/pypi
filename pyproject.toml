@@ -44,7 +44,3 @@ testpaths = ["tests"]
 python_version = "3.10"
 strict = true
 warn_return_any = false
-
-[tool.bandit]
-exclude_dirs = ["tests"]
-skips = ["B101"]         # Skip assert_used test
