@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Any
 
 from packaging.version import Version
@@ -112,8 +113,8 @@ class ReleaseFile:
     python_version: str
     requires_python: str | None
     size: int
-    upload_time: str
-    upload_time_iso_8601: str
+    upload_time: datetime
+    upload_time_iso_8601: datetime
     url: str
     yanked: bool
     yanked_reason: str | None
@@ -131,8 +132,10 @@ class ReleaseFile:
             python_version=data["python_version"],
             requires_python=data["requires_python"],
             size=data["size"],
-            upload_time=data["upload_time"],
-            upload_time_iso_8601=data["upload_time_iso_8601"],
+            upload_time=datetime.fromisoformat(data["upload_time"].replace("Z", "+00:00")),
+            upload_time_iso_8601=datetime.fromisoformat(
+                data["upload_time_iso_8601"].replace("Z", "+00:00")
+            ),
             url=data["url"],
             yanked=data["yanked"],
             yanked_reason=data["yanked_reason"],
