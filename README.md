@@ -30,7 +30,7 @@ async def main():
         package = await client.get_project("requests")
         print(f"{package.info.name} {package.info.version}")
         print(f"Summary: {package.info.summary}")
-        
+
         # Get specific version
         version = await client.get_project_version("requests", "2.31.0")
         print(f"Version {version.info.version} has {len(version.urls)} files")
